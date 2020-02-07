@@ -20,12 +20,23 @@ exports.webhook = functions.region(region).https.onRequest(async (req, res) => {
     if (req.body.events[0].message.type !== 'text') {
         return
     }
+    const event = req.body.events[0]
+    const userId = event.source.userId
+    const message = event.message.text
     
     //  7. call detectIntent function
     
     //  8. convert structure to json
     
-    //  9. reply to user
+    request({
+        method: "POST",
+        uri: `${LINE_MESSAGING_API}/reply`,
+        headers: LINE_HEADER,
+        body: JSON.stringify({
+            replyToken: event.replyToken,
+            messages: [{"type":"text","text":message}]
+        })
+    })
     
     res.status(200).end()
 })
