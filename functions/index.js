@@ -166,7 +166,11 @@ const handover = async(agent) => {
     let userId = parameters.userId
     let replyMessage = parameters.replyMessage
     
-    await reply_or_push(replyToken, userId, [{type:"text", text: replyMessage}])
-    return await agent.add('ส่งข้อความเรียบร้อยแล้ว')
+    if(replyMessage !== 'จบ') {
+        await reply_or_push(replyToken, userId, [{type:"text", text: replyMessage}])
+        return await agent.add('ส่งข้อความเรียบร้อยแล้ว')
+    } else {
+        return await agent.add('จบการสนทนาแล้ว')
+    }
 }
 
